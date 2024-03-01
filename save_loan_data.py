@@ -1,7 +1,7 @@
 import pandas as pd
 from sqlalchemy import create_engine
 
-def save_to_csv(dataframe, file_path):
+def save_to_csv(dataframe: pd.DataFrame, file_path: str) -> None:
     """
     Save DataFrame to a CSV file.
 
@@ -11,9 +11,8 @@ def save_to_csv(dataframe, file_path):
     """
     dataframe.to_csv(file_path, index=False)
 
-# Example DataFrame (replace this with your actual DataFrame)
 class RDSDatabaseConnector:
-    def __init__(self, credentials):
+    def __init__(self, credentials: dict) -> None:
         self.host = credentials['RDS_HOST']
         self.port = credentials['RDS_PORT']
         self.database = credentials['RDS_DATABASE']
@@ -21,7 +20,10 @@ class RDSDatabaseConnector:
         self.password = credentials['RDS_PASSWORD']
         self.engine = None
     
-    def connect(self):
+    def connect(self) -> None:
+        """
+        Establishes a connection to the RDS database.
+        """
         try:
             connection_string = f'postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}'
             self.engine = create_engine(connection_string)
@@ -29,7 +31,10 @@ class RDSDatabaseConnector:
         except Exception as e:
             print("Error connecting to the database:", e)
     
-    def extract_data(self):
+    def extract_data(self) -> pd.DataFrame:
+        """
+        Extracts data from the RDS database and returns it as a DataFrame.
+        """
         try:
             if self.engine is None:
                 print("Database connection not established. Please connect first.")
@@ -46,7 +51,10 @@ class RDSDatabaseConnector:
             print("Error extracting data from the database:", e)
             return None
 
-    def close_connection(self):
+    def close_connection(self) -> None:
+        """
+        Closes the connection to the RDS database.
+        """
         if self.engine is not None:
             self.engine.dispose()
             print("Connection to the database closed.")
@@ -73,3 +81,4 @@ data_df = connector.extract_data()
 # Call the save_to_csv() function
 file_path = 'data.csv'  # Provide the desired file path
 save_to_csv(data_df, file_path)
+

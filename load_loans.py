@@ -1,6 +1,6 @@
 import pandas as pd
 
-def load_data(file_path):
+def load_csv_data(file_path: str) -> pd.DataFrame:
     """
     Load data from a CSV file into a Pandas DataFrame.
 
@@ -8,22 +8,26 @@ def load_data(file_path):
         file_path (str): Path to the CSV file.
 
     Returns:
-        pandas.DataFrame: DataFrame containing the loaded data.
+        pd.DataFrame: DataFrame containing the loaded data.
     """
     try:
         df = pd.read_csv(file_path)
         return df
+    except FileNotFoundError:
+        print(f"File not found: {file_path}")
     except Exception as e:
-        print("Error loading data:", e)
-        return None
+        print(f"Error loading data: {e}")
+    return None
 
-# Example usage:
-file_path = 'data.csv'  # Provide the path to your CSV file
-data_df = load_data(file_path)
+if __name__ == "__main__":
+    # Example usage:
+    file_path = 'data.csv'  # Provide the path to your CSV file
+    data_df = load_csv_data(file_path)
 
-# Print the shape of the DataFrame
-print("Shape of the DataFrame:", data_df.shape)
+    if data_df is not None:
+        # Print the shape of the DataFrame
+        print("Shape of the DataFrame:", data_df.shape)
 
-# Print a sample of the data
-print("Sample of the data:")
-print(data_df.head())
+        # Print a sample of the data
+        print("Sample of the data:")
+        print(data_df.head())
