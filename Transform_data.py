@@ -1,4 +1,5 @@
 import pandas as pd
+import sys
 
 class DataTransform:
     @staticmethod
@@ -8,9 +9,15 @@ class DataTransform:
         return df
     
     @staticmethod
-    def convert_to_datetime(df, columns):
+    def convert_to_datetime(df, columns, date_formats=None):
+        if date_formats is None:
+            date_formats = {}  # Default empty dictionary
+        
         for col in columns:
-            df[col] = pd.to_datetime(df[col], errors='coerce')
+            if col in date_formats:
+                df[col] = pd.to_datetime(df[col], errors='coerce', format=date_formats[col])
+            else:
+                df[col] = pd.to_datetime(df[col], errors='coerce')
         return df
     
     @staticmethod
@@ -41,11 +48,30 @@ date_columns = ['issue_date', 'last_payment_date', 'next_payment_date', 'last_cr
 categorical_columns = ['grade', 'sub_grade', 'home_ownership', 'verification_status', 'loan_status', 'application_type', 'payment_plan', 'grade', 'sub_grade' ]  # Update with actual column names
 columns_with_symbols = ['purpose']  # Update with actual column names
 
+# Specify date formats for specific columns
+date_formats = {'issue_date': '%Y-%m-%d', 'last_payment_date': '%Y/%m/%d', 'next_payment_date': '%d-%m-%Y', 'last_credit_pull_date': '%m/%d/%Y'}
+
+# Redirect stderr to capture warning messages
+warnings = []
+
+def custom_warning(message):
+    warnings.append(message)
+    print("Warning captured:", message)
+
+sys.stderr.write = custom_warning
+
 # Apply transformations
 df = transformer.convert_to_numeric(df, numeric_columns)
-df = transformer.convert_to_datetime(df, date_columns)
+df = transformer.convert_to_datetime(df, date_columns, date_formats)
 df = transformer.convert_to_categorical(df, categorical_columns)
 df = transformer.remove_excess_symbols(df, columns_with_symbols, '@#$')
+
+# Reset stderr
+sys.stderr = sys.__stderr__
+
+# Print sorted warning messages
+for warning in sorted(warnings):
+    print(warning.strip())
 
 # Verify transformations
 print(df.dtypes)  # Check data types of columns
