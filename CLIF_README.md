@@ -66,7 +66,7 @@ def save_to_csv(dataframe, file_path):
 file_path = 'data.csv'
 save_to_csv(data_df, file_path)
 ```
-5. **Data Transformation**: Use the DataTransform class to perform various data transformations.
+5. **Data Transformation**: Use the DataFrameTransformer class to perform various data transformations.
 ```python
 import pandas as pd
 
@@ -261,7 +261,7 @@ if __name__ == "__main__":
     output_file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data_null_cleaned.csv'
     df.to_csv(output_file_path, index=False)
 ```
-8. **Data Transformation and Skew Correction**:
+8. **Data Transformation and Skew Correction**: Use the DataFrameTransformer class to display data transformation and skew correction.
 
 ```python
 import pandas as pd
@@ -328,7 +328,7 @@ if __name__ == "__main__":
     # Save the DataFrame to a new CSV file
     df_copy.to_csv(output_csv_path, index=False)
 ```
-9. **Identifying and Removing Outliers**:
+9. **Identifying and Removing Outliers**: Use the DataFrameTransform class to identify and remove outliers.
 
 ```python
 import pandas as pd
@@ -408,7 +408,7 @@ if __name__ == "__main__":
             print(f'Outliers in {column} after removal: {len(outliers_after)}')
             Plotter.visualize_outliers(df, column)
 ```
-10. **Data Cleaning and Correlation Analysis**:
+10. **Data Cleaning and Correlation Analysis**: Use the DataProcessor class to clean data and analyse correlation.
 
 ```python
 import pandas as pd
@@ -474,6 +474,10 @@ if __name__ == "__main__":
     output_csv_path = '/Users/fahiyeyusuf/Desktop/CLIF_data_cleaned.csv'
     df_cleaned.to_csv(output_csv_path, index=False)
 ```
+### Jupyter Notebooks
+
+1. [Data Preprocessing Notebook](Data_Preprocessing.ipynb) - Notebook containing code for data preprocessing tasks.
+2. [Data Visualisation Notebook](Data_Visualisation.ipynb) - Notebook containing code for data visualisation tasks.
 
 ## File Structure
 ```css
@@ -491,14 +495,3 @@ exploratory-data-analysis---customer-loans-in-finance/
 ```
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-```sql
-1. Save the changes to your README file.
-2. Add and commit the changes using Git:
-
-```bash
-git add CLIF_README.md
-git commit -m "Update README with project information"
-git push origin main
-```
-
