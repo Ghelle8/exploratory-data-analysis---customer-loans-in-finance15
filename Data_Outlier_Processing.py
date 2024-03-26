@@ -46,7 +46,7 @@ class DataFrameTransform:
 
 if __name__ == "__main__":
     # Load DataFrame from CSV file
-    file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data.csv'
+    file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data_transformed.csv'
     df = pd.read_csv(file_path)
 
     # Example usage:
@@ -74,3 +74,6 @@ if __name__ == "__main__":
         if not outliers_after.empty:
             print(f'Outliers in {column} after removal: {len(outliers_after)}')
             Plotter.visualize_outliers(df, column)
+# Step 4: Save the cleaned DataFrame to a new CSV file
+    cleaned_output_csv_path = '/Users/fahiyeyusuf/Desktop/CLIF_data_outlier_cleaned.csv'
+    df.to_csv(cleaned_output_csv_path, index=False)

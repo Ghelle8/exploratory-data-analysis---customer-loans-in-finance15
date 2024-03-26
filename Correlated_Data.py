@@ -52,7 +52,7 @@ class DataProcessor:
 
 if __name__ == "__main__":
     # Step 1: Load the dataset and preprocess it
-    file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data.csv'
+    file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data_outlier_cleaned.csv'
     columns_to_exclude = ['id', 'loan_amount', 'total_payment', 'recoveries']
     processor = DataProcessor(file_path)
     df_cleaned = processor.preprocess_data(columns_to_exclude)
