@@ -313,7 +313,7 @@ if __name__ == "__main__":
 
     # Example usage:
     # Step 1: Identify skewed columns, excluding certain columns
-    columns_to_exclude = ['id','member_id']  # Specify columns to exclude from skewness calculation
+    columns_to_exclude = ['id','member_id', 'issue_date', 'last_payment_date', 'next_payment_date', 'last_credit_pull_date','payment_plan', 'loan_status','policy_code', 'grade', 'sub_grade', 'application_type', 'home_ownership', 'loan_amount', 'recoveries']  # Specify columns to exclude from skewness calculation
     skewed_columns = DataFrameTransform.identify_skewed_columns(df, exclude_columns=columns_to_exclude)
     print("Skewed columns:", skewed_columns)
 
@@ -399,7 +399,7 @@ if __name__ == "__main__":
     outlier_columns = ['loan_amount', 'funded_amount', 'funded_amount_inv', 'annual_inc', 'delinq_2yrs',
                        'inq_last_6mths', 'int_rate', 'instalment', 'mths_since_last_delinq', 'open_accounts',
                        'total_accounts', 'out_prncp', 'out_prncp_inv', 'total_payment', 'total_payment_inv',
-                       'total_rec_int', 'total_rec_late_fee', 'recoveries', 'collection_recovery_fee',
+                       'total_rec_int', 'total_rec_late_fee', 'collection_recovery_fee',
                        'collections_12_mths_ex_med', 'mths_since_last_major_derog', 'dti']  # Adjust this list based on visualization
 
     for column in outlier_columns:

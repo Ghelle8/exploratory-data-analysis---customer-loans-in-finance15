@@ -55,7 +55,7 @@ if __name__ == "__main__":
     outlier_columns = ['loan_amount', 'funded_amount', 'funded_amount_inv', 'annual_inc', 'delinq_2yrs',
                        'inq_last_6mths', 'int_rate', 'instalment', 'mths_since_last_delinq', 'open_accounts',
                        'total_accounts', 'out_prncp', 'out_prncp_inv', 'total_payment', 'total_payment_inv',
-                       'total_rec_int', 'total_rec_late_fee', 'recoveries', 'collection_recovery_fee',
+                       'total_rec_int', 'total_rec_late_fee', 'collection_recovery_fee',
                        'collections_12_mths_ex_med', 'mths_since_last_major_derog', 'dti']  # Adjust this list based on visualization
 
     for column in outlier_columns:

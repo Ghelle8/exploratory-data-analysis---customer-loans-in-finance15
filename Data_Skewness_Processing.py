@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     # Example usage:
     # Step 1: Identify skewed columns, excluding certain columns
-    columns_to_exclude = ['id','member_id']  # Specify columns to exclude from skewness calculation
+    columns_to_exclude = ['id','member_id', 'issue_date', 'last_payment_date', 'next_payment_date', 'last_credit_pull_date','payment_plan', 'loan_status','policy_code', 'grade', 'sub_grade', 'application_type', 'home_ownership', 'loan_amount', 'recoveries']  # Specify columns to exclude from skewness calculation
     skewed_columns = DataFrameTransform.identify_skewed_columns(df, exclude_columns=columns_to_exclude)
     print("Skewed columns:", skewed_columns)
 
