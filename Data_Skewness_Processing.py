@@ -15,11 +15,19 @@ class Plotter:
 
 class DataFrameTransform:
     @staticmethod
-    def identify_skewed_columns(df: pd.DataFrame, skew_threshold: float = 0.5) -> list:
+    def identify_skewed_columns(df: pd.DataFrame, skew_threshold: float = 0.5, exclude_columns: list = None) -> list:
+        if exclude_columns is None:
+            exclude_columns = []
+            
         numeric_df = df.select_dtypes(include=np.number)
+        
+        # Remove excluded columns from consideration
+        numeric_df = numeric_df.drop(columns=exclude_columns, errors='ignore')
+        
         skewness = numeric_df.skew()
         skewed_columns = skewness[abs(skewness) > skew_threshold].index.tolist()
         return skewed_columns
+
 
     @staticmethod
     def apply_best_transformation(df: pd.DataFrame, skewed_columns: list) -> pd.DataFrame:
@@ -31,12 +39,13 @@ class DataFrameTransform:
 
 if __name__ == "__main__":
     # Load DataFrame from CSV file
-    file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data.csv'
+    file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data_specific_values_cleaned.csv'
     df = pd.read_csv(file_path)
 
     # Example usage:
-    # Step 1: Identify skewed columns
-    skewed_columns = DataFrameTransform.identify_skewed_columns(df)
+    # Step 1: Identify skewed columns, excluding certain columns
+    columns_to_exclude = ['id','member_id']  # Specify columns to exclude from skewness calculation
+    skewed_columns = DataFrameTransform.identify_skewed_columns(df, exclude_columns=columns_to_exclude)
     print("Skewed columns:", skewed_columns)
 
     # Visualize the data using Plotter

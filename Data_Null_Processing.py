@@ -16,9 +16,14 @@ class DataFrameTransform:
         return df.isnull().sum()
 
     @staticmethod
-    def drop_columns(df: pd.DataFrame, columns_to_drop: list) -> pd.DataFrame:
-        existing_columns = df.columns.intersection(columns_to_drop)
-        return df.drop(columns=existing_columns)
+    def remove_specific_values(df: pd.DataFrame, columns_to_clean: dict) -> pd.DataFrame:
+        """
+        Remove specific values within columns and replace them with NaN.
+        columns_to_clean should be a dictionary where keys are column names and values are lists of values to remove.
+        """
+        for col, values_to_remove in columns_to_clean.items():
+            df[col] = df[col].replace(values_to_remove, pd.NA)
+        return df
 
     @staticmethod
     def impute_missing(df: pd.DataFrame, strategy: str = 'median') -> pd.DataFrame:
@@ -45,9 +50,9 @@ if __name__ == "__main__":
     print("NULL counts in each column:")
     print(null_counts)
 
-    # Step 2: Drop columns with a large amount of missing values
-    columns_to_drop = ['funded_amount', 'term', 'int_rate', 'employment_length', 'mths_since_last_deling', 'mths_since_last_record', 'last_payment_date', 'next_payment_date', 'last_credit_pull_date', 'collections_12_mths_ex_med', 'mths_since_last_major_derog']  # Adjust this list based on null_counts
-    df = DataFrameTransform.drop_columns(df, columns_to_drop)
+    # Step 2: Remove specific values within columns
+    columns_to_clean = {'term': ['< 1 year', '10+ years'], 'employment_length': ['< 1 year', '10+ years']}
+    df = DataFrameTransform.remove_specific_values(df, columns_to_clean)
 
     # Step 3: Impute missing values
     # Let's say we choose to impute missing values with the median for numerical columns
@@ -62,5 +67,5 @@ if __name__ == "__main__":
     Plotter.visualize_nulls(df)
 
     # Save the cleaned DataFrame to a new CSV file
-    output_file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data_null_cleaned.csv'
+    output_file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data_specific_values_cleaned.csv'
     df.to_csv(output_file_path, index=False)

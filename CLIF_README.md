@@ -130,7 +130,6 @@ if __name__ == "__main__":
     # Verify transformations
     print(df.dtypes)  # Check data types of columns
     print(df.head())  # View sample of transformed data
-
 ```
 6. **Analysing DataFrame**: Use the DataFrameInfo class to analyse the DataFrame.
 ```python
@@ -212,9 +211,14 @@ class DataFrameTransform:
         return df.isnull().sum()
 
     @staticmethod
-    def drop_columns(df: pd.DataFrame, columns_to_drop: list) -> pd.DataFrame:
-        existing_columns = df.columns.intersection(columns_to_drop)
-        return df.drop(columns=existing_columns)
+    def remove_specific_values(df: pd.DataFrame, columns_to_clean: dict) -> pd.DataFrame:
+        """
+        Remove specific values within columns and replace them with NaN.
+        columns_to_clean should be a dictionary where keys are column names and values are lists of values to remove.
+        """
+        for col, values_to_remove in columns_to_clean.items():
+            df[col] = df[col].replace(values_to_remove, pd.NA)
+        return df
 
     @staticmethod
     def impute_missing(df: pd.DataFrame, strategy: str = 'median') -> pd.DataFrame:
@@ -241,9 +245,9 @@ if __name__ == "__main__":
     print("NULL counts in each column:")
     print(null_counts)
 
-    # Step 2: Drop columns with a large amount of missing values
-    columns_to_drop = ['funded_amount', 'term', 'int_rate', 'employment_length', 'mths_since_last_deling', 'mths_since_last_record', 'last_payment_date', 'next_payment_date', 'last_credit_pull_date', 'collections_12_mths_ex_med', 'mths_since_last_major_derog']  # Adjust this list based on null_counts
-    df = DataFrameTransform.drop_columns(df, columns_to_drop)
+    # Step 2: Remove specific values within columns
+    columns_to_clean = {'term': ['< 1 year', '10+ years'], 'employment_length': ['< 1 year', '10+ years']}
+    df = DataFrameTransform.remove_specific_values(df, columns_to_clean)
 
     # Step 3: Impute missing values
     # Let's say we choose to impute missing values with the median for numerical columns
@@ -258,11 +262,10 @@ if __name__ == "__main__":
     Plotter.visualize_nulls(df)
 
     # Save the cleaned DataFrame to a new CSV file
-    output_file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data_null_cleaned.csv'
+    output_file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data_specific_values_cleaned.csv'
     df.to_csv(output_file_path, index=False)
 ```
 8. **Data Transformation and Skew Correction**: Use the DataFrameTransformer class to display data transformation and skew correction.
-
 ```python
 import pandas as pd
 import seaborn as sns
@@ -281,11 +284,19 @@ class Plotter:
 
 class DataFrameTransform:
     @staticmethod
-    def identify_skewed_columns(df: pd.DataFrame, skew_threshold: float = 0.5) -> list:
+    def identify_skewed_columns(df: pd.DataFrame, skew_threshold: float = 0.5, exclude_columns: list = None) -> list:
+        if exclude_columns is None:
+            exclude_columns = []
+            
         numeric_df = df.select_dtypes(include=np.number)
+        
+        # Remove excluded columns from consideration
+        numeric_df = numeric_df.drop(columns=exclude_columns, errors='ignore')
+        
         skewness = numeric_df.skew()
         skewed_columns = skewness[abs(skewness) > skew_threshold].index.tolist()
         return skewed_columns
+
 
     @staticmethod
     def apply_best_transformation(df: pd.DataFrame, skewed_columns: list) -> pd.DataFrame:
@@ -297,12 +308,13 @@ class DataFrameTransform:
 
 if __name__ == "__main__":
     # Load DataFrame from CSV file
-    file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data.csv'
+    file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data_specific_values_cleaned.csv'
     df = pd.read_csv(file_path)
 
     # Example usage:
-    # Step 1: Identify skewed columns
-    skewed_columns = DataFrameTransform.identify_skewed_columns(df)
+    # Step 1: Identify skewed columns, excluding certain columns
+    columns_to_exclude = ['id','member_id']  # Specify columns to exclude from skewness calculation
+    skewed_columns = DataFrameTransform.identify_skewed_columns(df, exclude_columns=columns_to_exclude)
     print("Skewed columns:", skewed_columns)
 
     # Visualize the data using Plotter
@@ -329,7 +341,6 @@ if __name__ == "__main__":
     df_copy.to_csv(output_csv_path, index=False)
 ```
 9. **Identifying and Removing Outliers**: Use the DataFrameTransform class to identify and remove outliers.
-
 ```python
 import pandas as pd
 import seaborn as sns
@@ -379,7 +390,7 @@ class DataFrameTransform:
 
 if __name__ == "__main__":
     # Load DataFrame from CSV file
-    file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data.csv'
+    file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data_transformed.csv'
     df = pd.read_csv(file_path)
 
     # Example usage:
@@ -407,9 +418,11 @@ if __name__ == "__main__":
         if not outliers_after.empty:
             print(f'Outliers in {column} after removal: {len(outliers_after)}')
             Plotter.visualize_outliers(df, column)
+# Step 4: Save the cleaned DataFrame to a new CSV file
+    cleaned_output_csv_path = '/Users/fahiyeyusuf/Desktop/CLIF_data_outlier_cleaned.csv'
+    df.to_csv(cleaned_output_csv_path, index=False)
 ```
 10. **Data Cleaning and Correlation Analysis**: Use the DataProcessor class to clean data and analyse correlation.
-
 ```python
 import pandas as pd
 import numpy as np
@@ -465,7 +478,7 @@ class DataProcessor:
 
 if __name__ == "__main__":
     # Step 1: Load the dataset and preprocess it
-    file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data.csv'
+    file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data_outlier_cleaned.csv'
     columns_to_exclude = ['id', 'loan_amount', 'total_payment', 'recoveries']
     processor = DataProcessor(file_path)
     df_cleaned = processor.preprocess_data(columns_to_exclude)
