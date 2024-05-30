@@ -5,24 +5,27 @@
 1. [Description](#description)
 2. [Installation](#installation)
 3. [Usage](#usage)
-4. [File Structure](#file-structure)
-5. [License](#license)
+   - [Loading Data](#loading-data)
+   - [Connecting to RDS Database](#connecting-to-rds-database)
+   - [Data Processing and Analysis](#data-processing-and-analysis)
+4. [Running Jupyter Notebooks](#running-jupyter-notebooks)
+5. [File Structure](#file-structure)
+6. [License](#license)
 
 ## Description
 
-This project aims to perform exploratory data analysis on customer loans in the finance domain. It includes functions to load data from a CSV file into a Pandas DataFrame and extract data from an RDS database, as well as save data to a CSV file. Through this project, I've learned how to work with data from financial databases, connect to databases using SQLAlchemy, and perform data analysis using Pandas.
+This project focuses on performing exploratory data analysis (EDA) on customer loans in the finance domain. The primary objectives are to understand the characteristics of the loan data, identify patterns, trends, and relationships within the data, and extract actionable insights. The analysis includes data loading, data cleaning, data transformation, and visualization using Python libraries such as Pandas, NumPy, and Matplotlib.
 
 ## Installation
 
-To install the required dependencies, run:
+To use this project, you need to have Python installed on your system. You can install the required dependencies using pip:
 
-pip install pandas sqlalchemy
-
-
+```bash
+pip install pandas numpy matplotlib sqlalchemy
+```
 ## Usage
 
-1. **Loading Data**: Use the `load_data` function to load data from a CSV file into a Pandas DataFrame.
-
+1. **Loading Data**: The project provides a utility function load_data to load data from a CSV file into a Pandas DataFrame. Simply call this function and pass the file path as an argument:
 ```python
 import pandas as pd
 
@@ -33,7 +36,7 @@ def load_data(file_path):
 file_path = 'data.csv'
 data_df = load_data(file_path)
 ```
-2. **Connecting to RDS Database**: Create an instance of RDSDatabaseConnector with your RDS credentials and use the connect method to establish a connection.
+2. **Connecting to RDS Database**: If you have data stored in an RDS database, you can use the 'RDSDatabaseConnector' class provided in 'RDS_SQLAlchemy.py' to establish a connection. Replace the placeholder credentials with your RDS instance details:
 
 ```python
 from sqlalchemy import create_engine
@@ -479,7 +482,7 @@ class DataProcessor:
 if __name__ == "__main__":
     # Step 1: Load the dataset and preprocess it
     file_path = '/Users/fahiyeyusuf/Desktop/CLIF_data_outlier_cleaned.csv'
-    columns_to_exclude = ['id', 'loan_amount', 'total_payment', 'recoveries']
+    columns_to_exclude = ['id', 'loan_amount', 'total_payment', 'recoveries', 'instalment', 'out_prncp']
     processor = DataProcessor(file_path)
     df_cleaned = processor.preprocess_data(columns_to_exclude)
     
@@ -489,8 +492,26 @@ if __name__ == "__main__":
 ```
 ### Jupyter Notebooks
 
+**Running Jupyter Notebooks**
+To run the Jupyter Notebooks included in this project, follow these steps:
+
+1. Install Jupyter Notebook: If you haven't already, install Jupyter Notebook using pip:
+```bash
+pip install notebook
+```
+2. Navigate to Project Directory: Open a terminal and navigate to the directory containing the Jupyter Notebook files.
+
+3. Start Jupyter Notebook Server: Run the following command to start the Jupyter Notebook server:
+
+```bash
+jupyter notebook
+```
+4. Access Notebooks: Once the server starts, it will open a new tab in your web browser with the Jupyter Notebook dashboard. Click on the notebook file you want to open (e.g., Data_Preprocessing.ipynb) to view and run the notebook.
+
+**Jupyter Notebook Files**
 1. [Data Preprocessing Notebook](Data_Preprocessing.ipynb) - Notebook containing code for data preprocessing tasks.
 2. [Data Visualisation Notebook](Data_Visualisation.ipynb) - Notebook containing code for data visualisation tasks.
+3. [Loan Analysis Notebook](Loan_Analysis.ipynb) - Notebook containing code for analysis of loan data.
 
 ## File Structure
 ```css
